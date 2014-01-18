@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>McDistance</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<link href="static/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="static/dist/css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index">McDistance</a>
+				<a class="navbar-text" href="directions">Get Directions</a>
+				<a class="navbar-text" href="about">About</a>
+			</div>
+		</nav>
+
+		<div id="map-canvas">
+			<!-- map rendered here -->
+		</div>
+
+
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeCQnTkgPNgimqC6XYrIprtVAF38Z4etg&sensor=false"></script>
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<script src="/static/dist/js/bootstrap.min.js"></script>
+
+		<script type="text/javascript">
+	      		function initialize() {
+              			var mapOptions = {
+          				center: new google.maps.LatLng(42.331, -83.045),
+          				zoom: 8
+        			};
+        		var map = new google.maps.Map(document.getElementById("map-canvas"),
+            			mapOptions);
+          		}
+      			google.maps.event.addDomListener(window, 'load', initialize);
+    		</script>      
+	</body>
+</html>

@@ -21,7 +21,7 @@
 		</div>
 
 
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCeCQnTkgPNgimqC6XYrIprtVAF38Z4etg&sensor=false"></script>
+		<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCeCQnTkgPNgimqC6XYrIprtVAF38Z4etg&sensor=false"></script>
 		<script src="https://code.jquery.com/jquery.js"></script>
 		<script src="/static/dist/js/bootstrap.min.js"></script>
 
@@ -39,7 +39,7 @@
 						center: new google.maps.LatLng(-53.093199,73.52452),
 						zoom: 11
 					});
-					setRadius(new google.maps.LatLng(-53.093199,73.52452));
+					setCircle(new google.maps.LatLng(-53.093199,73.52452));
 				
 				}
 
@@ -53,7 +53,7 @@
 							center: new google.maps.LatLng(lat, lng),
 							zoom: 11
 						});
-						setRadius(new google.maps.LatLng(lat, lng));
+						setCircle(new google.maps.LatLng(lat, lng));
 					},
 					failMap);
 				}
@@ -63,6 +63,11 @@
 					failMap("no gps");
 				}
 				function setRadius(origin){
+					var distance = 3000;
+
+					return distance;
+				}
+				function setCircle(origin){
 					var cityCircle;
 			  
 					var mcRadius = {
@@ -71,7 +76,7 @@
 						strokeWeight: 2,
 			   			map: map,
 			   			center: origin,
-			    			radius: 3000
+			    			radius: setRadius(origin)
 			 		};
 
 			 		cityCircle = new google.maps.Circle(mcRadius);

@@ -21,39 +21,111 @@
 		</div>
 
 
-		<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCeCQnTkgPNgimqC6XYrIprtVAF38Z4etg&sensor=false"></script>
+		<script src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCeCQnTkgPNgimqC6XYrIprtVAF38Z4etg&sensor=true"></script>
+		<!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script>-->
 		<script src="https://code.jquery.com/jquery.js"></script>
 		<script src="/static/dist/js/bootstrap.min.js"></script>
 
 		<script type="text/javascript">
+			var origin;
+			var distance;
 			var map;
+			var service;
+			var mcResults;
+			var mcDistance = 17000;
+			function performSearch() {
+			    alert("in performSearch");
+			    var request = {
+				bounds: map.getBounds(),
+				keyword: 'mcdonalds'
+			    };
+			    service.radarSearch(request, callback);
+			}
+
+			function callback(results, status) {
+			    if(status != google.maps.places.PlacesServiceStatus.OK)
+			    {
+				if(status ==
+					google.maps.places.PlacesServiceStatus.ZERO_RESULTS)
+				{
+				    alert("I'm so sorry.  There are no nearby McDonalds");
+				}
+				else 
+				{
+				    alert(status);
+				}
+				return;
+			    }
+			    mcResults = results;
+			    for(var i = 0, result; result = results[i]; i++) {
+				var marker = new google.maps.Marker({
+					map: map,
+					position: result.geometry.location
+				});
+				distance = new google.maps.DistanceMatrixService();
+				distance.getDistanceMatrix(
+					{
+					origins: [origin],
+					destinations: [result.geometry.location],
+					travelMode: google.maps.TravelMode.DRIVING,
+					durationInTraffic: true,
+					avoidHighways: false,
+					avoidTolls: false
+					}, callbackDistance);
+			    }
+			    function callbackDistance(response, status) {
+				if(status == google.maps.DistanceMatrixStatus.OK) {
+			    		var destinations = response.destinationAddresses;
+					var results = response.rows[0].elements;
+					var element = results[0];
+				    	var distance = element.distance.value;
+					console.log(distance);
+			    		var dest = destinations[0];
+					if(distance <= mcDistance){
+					    mcDistance = distance;
+					}
+				}
+			    }
+			}		
 			function initialize() {
-				var origin;
 				function showMap(mapOptions) {
+				    alert("showMap");
 					map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+					service = new google.maps.places.PlacesService(map);
+					google.maps.event.addListenerOnce(map, 'bounds_changed',
+						performSearch);
 				}
 
 				function failMap(error) {
 				  	console.error(error);
+					var lat = 44.75;
+					var lng = -85.60;
+					origin = new google.maps.LatLng(lat, lng);
 					showMap({
-						center: new google.maps.LatLng(-53.093199,73.52452),
-						zoom: 11
+						center: origin,
+						zoom: 13
 					});
-					setCircle(new google.maps.LatLng(-53.093199,73.52452));
-				
+					service = new google.maps.places.PlacesService(map);
+					google.maps.event.addListenerOnce(map, 'bounds_changed',performSearch);
+					alert("after showmap");
+					setCircle(new google.maps.LatLng(lat, lng));
+					
+					//-53.093199,73.52452
 				}
 
 				if(navigator.geolocation)
-				{
+			    	    {
 					navigator.geolocation.getCurrentPosition(function(position) {
 
 						var lat = position.coords.latitude;
 						var lng = position.coords.longitude;
+						origin = new google.maps.LatLng(lat, lng);
 						showMap({
-							center: new google.maps.LatLng(lat, lng),
-							zoom: 11
+							center: origin,
+							zoom: 13
 						});
 						setCircle(new google.maps.LatLng(lat, lng));
+						
 					},
 					failMap);
 				}
@@ -63,11 +135,18 @@
 					failMap("no gps");
 				}
 				function setRadius(origin){
-					var distance = 3000;
+				    	if(mcDistance <= 3000){
+					    var distance = mcDistance;	
+					}
+					else
+					{
+					    var distance = 3000;
+					    alert(mcDistance);
+					}
 
 					return distance;
 				}
-				function setCircle(origin){
+				function setCircle(spot){
 					var cityCircle;
 			  
 					var mcRadius = {
@@ -75,8 +154,8 @@
 						strokeOpacity: 0.8,
 						strokeWeight: 2,
 			   			map: map,
-			   			center: origin,
-			    			radius: setRadius(origin)
+			   			center: spot,
+			    			radius: setRadius(spot)
 			 		};
 
 			 		cityCircle = new google.maps.Circle(mcRadius);

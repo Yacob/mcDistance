@@ -42,7 +42,7 @@
 				{
 				    var distance = 3000;
 				}
-				return distance;
+				return distance * .8;
 			}
 			function setCircle(spot){
 			    	if(cityCircle){
@@ -130,7 +130,7 @@
 					origin = new google.maps.LatLng(lat, lng);
 					showMap({
 						center: origin,
-						zoom: 13
+						zoom: 14
 					});
 					
 					//-53.093199,73.52452
@@ -145,7 +145,7 @@
 						origin = new google.maps.LatLng(lat, lng);
 						showMap({
 							center: origin,
-							zoom: 13
+							zoom: 14
 						});
 						
 					},

@@ -8,14 +8,19 @@
 		<link href="static/dist/css/style.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	    	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#">McDistance</a>
-				<a class="navbar-text" href="directions">Get Directions</a>
+				<!--<a class="navbar-text" href="directions">Get Directions</a>-->
 				<a class="navbar-text" href="about">About</a>
 			</div>
 		</nav>
-
+	    	<!--<nav class="navbar-form">
+		    <div class="form-group">
+			<input type="number" class="form-control" id="latitudeId" placeholder="latitude">
+			<input type="number" class="form-control" id="longitudeId" placeholder="longitude">
+		    </div>
+		</nav>-->
 		<div id="map-canvas">
 			<!-- map rendered here -->
 		</div>
@@ -130,7 +135,7 @@
 					origin = new google.maps.LatLng(lat, lng);
 					showMap({
 						center: origin,
-						zoom: 14
+						zoom: 15
 					});
 					
 					//-53.093199,73.52452
@@ -145,7 +150,7 @@
 						origin = new google.maps.LatLng(lat, lng);
 						showMap({
 							center: origin,
-							zoom: 14
+							zoom: 15
 						});
 						
 					},
@@ -160,7 +165,6 @@
 			}
           	
       			google.maps.event.addDomListener(window, 'load', initialize);
-
 		
     		</script>      
 	</body>
